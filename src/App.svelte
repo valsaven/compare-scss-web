@@ -2,9 +2,7 @@
 import { type Change, diffLines } from 'diff';
 import * as sass from 'sass';
 import { writable } from 'svelte/store';
-
-import Sun from './lib/icons/Sun.svelte';
-import Moon from './lib/icons/Moon.svelte';
+import ThemeToggle from './lib/ThemeToggle.svelte';
 
 let scss1: string = '';
 let scss2: string = '';
@@ -13,16 +11,6 @@ let css2: string = '';
 const error1 = writable('');
 const error2 = writable('');
 let diffResult: string = '';
-
-let themeIcon = Sun;
-
-if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-  document.documentElement.classList.add('dark');
-  themeIcon = Sun;
-} else {
-  document.documentElement.classList.remove('dark');
-  themeIcon = Moon;
-}
 
 const compileSCSS = async (scss: string) => {
   try {
@@ -36,20 +24,6 @@ const compileSCSS = async (scss: string) => {
       console.error('Unknown error:', error);
       return 'Unknown error.';
     }
-  }
-}
-
-const toggleTheme = () => {
-  const isDarkMode = document.documentElement.classList.contains("dark");
-
-  if (isDarkMode) {
-    themeIcon = Moon;
-    localStorage.theme = "light";
-    document.documentElement.classList.remove("dark");
-  } else {
-    themeIcon = Sun;
-    localStorage.theme = "dark";
-    document.documentElement.classList.add("dark");
   }
 }
 
@@ -84,11 +58,7 @@ $: error2.set('');
 </script>
 
 <main>
-  <h1>C
-    <button class="toggle-theme-btn" on:click={toggleTheme}>
-      <svelte:component this={themeIcon}/>
-    </button>
-    mpare SCSS</h1>
+  <h1>C<ThemeToggle/>mpare SCSS</h1>
 
   <div class="code">
     <div class="code__block code__block--scss">
@@ -159,13 +129,6 @@ pre {
 pre,
 .diff {
   border: 1px solid #ccc;
-}
-
-.toggle-theme-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
 }
 
 .code {
