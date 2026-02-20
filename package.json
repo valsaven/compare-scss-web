@@ -16,7 +16,7 @@
     "colors": "1.4.0",
     "diff": "8.0.3",
     "sass": "1.97.3",
-    "svelte": "5.48.0",
+    "svelte": "5.53.0",
     "svelte-check": "4.3.5",
     "typescript": "5.9.3",
     "vite": "7.3.1"
