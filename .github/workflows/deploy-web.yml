@@ -1,0 +1,62 @@
+name: Deploy to web branch
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-web
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+        env:
+          BASE_PATH: /compare-scss-web/
+
+      - name: Add static files for web branch
+        run: |
+          cp LICENSE dist/
+          printf '%s\n' \
+            '# compare-scss-web' \
+            'Web-version of utility for refactoring and comparing SCSS/CSS styles.' \
+            > dist/README.md
+
+      - name: Prepare commit message
+        id: meta
+        run: |
+          VERSION=$(node -pe "require('./package.json').version")
+          BODY=$(git log -1 --format=%B | tail -n +2)
+          {
+            echo "message<<EOF"
+            echo "v${VERSION}"
+            echo ""
+            echo "$BODY"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: web
+          publish_dir: ./dist
+          commit_message: ${{ steps.meta.outputs.message }}
