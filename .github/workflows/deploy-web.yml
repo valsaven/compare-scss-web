@@ -16,6 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch web branch
+        run: git fetch origin web:refs/heads/web
 
       - uses: pnpm/action-setup@v4
         with:
@@ -44,13 +49,9 @@ jobs:
       - name: Prepare commit message
         id: meta
         run: |
-          VERSION=$(node -pe "require('./package.json').version")
-          BODY=$(git log -1 --format=%B | tail -n +2)
           {
             echo "message<<EOF"
-            echo "v${VERSION}"
-            echo ""
-            echo "$BODY"
+            node scripts/ci/prepare-deploy-message.mjs
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
