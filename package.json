@@ -1,7 +1,7 @@
 {
   "name": "compare-scss",
   "private": true,
-  "version": "1.3.2",
+  "version": "1.3.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,11 +13,11 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "7.1.2",
     "@tsconfig/svelte": "5.0.8",
-    "@types/node": "25.9.1",
+    "@types/node": "25.9.3",
     "colors": "1.4.0",
     "diff": "9.0.0",
-    "sass": "1.100.0",
-    "svelte": "5.56.2",
+    "sass": "1.101.0",
+    "svelte": "5.56.3",
     "svelte-check": "4.6.0",
     "typescript": "6.0.3",
     "vite": "8.0.16"
