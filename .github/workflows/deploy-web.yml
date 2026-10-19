@@ -15,21 +15,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Fetch web branch
         run: git fetch origin web:refs/heads/web
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/setup@v1
         with:
-          version: 9
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
+          version: 12
+          runtime: node@26
+          cache: true
 
       - run: pnpm install --frozen-lockfile
 
